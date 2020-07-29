@@ -1,0 +1,116 @@
+swagger: "2.0"
+info:
+  description: "接口文档"
+  version: "v1"
+  title: "接口文档"
+  termsOfService: ""
+  contact:
+    email: ""
+  license:
+    name: ""
+    url: ""
+host: "192.168.11.24:9210"
+basePath: "/api/v1/"
+
+schemes:
+- "https"
+- "http"
+
+paths:
+
+  /login/:
+    post:
+      tags:
+        - 账号管理
+      summary: 登录
+      description: 登录
+      parameters:
+        - name: username
+          in: form
+          required: true
+          description: 用户名
+        - name: password
+          in: form
+          required: true
+          description: 密码
+      responses:
+        200:
+          description: 成功。
+          schema:
+            $ref: '#/definitions/LoginResponse'
+        403:
+          description: 没有权限访问
+        500:
+          description: 后台错误
+          schema:
+            $ref: '#/definitions/Error'
+  /logout/:
+    post:
+      tags:
+        - "账号管理"
+      summary: 登出
+      description: 登出
+      parameters:
+        - name: X-CSRFToken
+          in: header
+          type: string
+          description: csrf token
+      responses:
+        200:
+          description: "返回成功"
+        500:
+          description: "后台处理异常"
+
+definitions:
+  Success:
+    type: object
+    properties:
+      code:
+        type: string
+        description: 状态码 200 表示成功
+      msg:
+        type: string
+        description: 状态描述
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+        default: 500
+        description: 错误代码
+      msg:
+        type: string
+        description: 错误描述
+
+  LoginData:
+    type: object
+    properties:
+      token:
+        type: text
+        description: 认证令牌，使用方式是在请求headers加上 Authorization字段 JWT $token$ 注意空格
+      user_id:
+        type: integer
+        description: 用户id
+      username:
+        type: string
+        description: 用户名
+      UserID:
+        type: string
+        description: 高院用户id
+      PhotoFileName:
+        type: string
+        description: 个人照片文件--base64码
+  LoginResponse:
+    type: object
+    properties:
+      code:
+        type: string
+        description: 状态码 200 表示成功
+      msg:
+        type: string
+        description: 状态描述
+      data:
+        type: object
+        description: 登录返回结果
+        $ref: '#/definitions/LoginData'
