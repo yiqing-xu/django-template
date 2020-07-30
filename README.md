@@ -7,13 +7,17 @@ Django restframework开发模板
 - django 2.2
 - djangorestframework 3.11
 
+### 实现功能
+
+
 ### 代码结构
 ```
 ├── apps 
 │   ├── user 
+|   |—— models.py
 │   ├── response.py 
 │   └── views.py 
-├── backend 
+├── project 
 │   ├── dev_settings.py 
 │   ├── settings.py 
 │   ├── urls.py 

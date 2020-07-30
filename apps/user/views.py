@@ -1,25 +1,24 @@
 from rest_framework_jwt.views import ObtainJSONWebToken, jwt_response_payload_handler
-from rest_framework_jwt.settings import api_settings
 
 from views import APIView
 from user.models import Account
 from user.serializers import AccountSerializer
 from response import JSONResponse
-
-jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER  # 生成token
-jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER  # 解析token
+from websocket.jobs import send_message, mass_message
 
 
 class TestView(APIView):
 
-    def get(self, *args, **kwargs):
-        print(self.request.user)
-        query_params = self.request.query_params
-        print(query_params)
+    def get(self, request, **kwargs):
+        user_id = request.user.id
+        data = {'text': 'websocket成功'}
+        send_message.delay(user_id, data)
         return JSONResponse.success()
 
     def post(self, request, **kwargs):
-        print(self.request.user.id)
+        user_ids = request.data.get("user_ids")
+        data = {'text': 'websocket成功'}
+        mass_message(user_ids, data)
         return JSONResponse.success()
 
 

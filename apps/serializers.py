@@ -15,6 +15,10 @@ class BaseSerializer(serializers.ModelSerializer):
     update_time = serializers.DateTimeField(format="%Y-%m-%d %H:%M", required=False)
 
     def __init__(self, **kwargs):
+        """
+        去除冗余字段
+        :param kwargs: (field1, field2, )
+        """
         pop_fields = kwargs.pop("pop_field", ())
         super(BaseSerializer, self).__init__(**kwargs)
         for field_name in pop_fields:
