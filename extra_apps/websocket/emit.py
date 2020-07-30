@@ -3,7 +3,6 @@
 # @Time    : 2020/7/30 13:41
 # @Author  : xuyiqing
 # @File    : emit.py
-from bson.objectid import ObjectId
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.conf import settings
