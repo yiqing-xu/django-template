@@ -40,7 +40,8 @@ def mass_msg(user_ids: list, message=None):
     channel_names = [ch.decode() for ch in channel_names if ch]
     channel_layer = get_channel_layer()
     if channel_names:
-        select_room_name = 'room.' + user_ids[0]
+        # select_room_name = 'room.' + user_ids[0]
+        select_room_name = async_to_sync(channel_layer.new_channel)(prefix='room.')
         for channel_name in channel_names:
             async_to_sync(channel_layer.group_add)(
                 select_room_name,
@@ -57,8 +58,9 @@ def mass_msg(user_ids: list, message=None):
                 )
             }
         )
-        for channel_name in channel_names:
-            async_to_sync(channel_layer.group_discard)(
-                select_room_name,
-                channel_name
-            )
+        async_to_sync(channel_layer.flush)()
+        # for channel_name in channel_names:
+        #     async_to_sync(channel_layer.group_discard)(
+        #         select_room_name,
+        #         channel_name
+        #     )

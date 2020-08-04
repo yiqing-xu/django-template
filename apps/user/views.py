@@ -10,6 +10,10 @@ from websocket.jobs import send_message, mass_message
 class TestView(APIView):
 
     def get(self, request, **kwargs):
+        from django.contrib.sites.models import Site
+
+        site = Site.objects.get_current().domain
+        print(site)
         user_id = request.user.id
         data = {'text': 'websocket成功'}
         send_message.delay(user_id, data)

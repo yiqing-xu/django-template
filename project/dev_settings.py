@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'channels',
     'django_rq',
+    'django_crontab',
 
     "swagger",
     "websocket",
@@ -131,6 +132,7 @@ CACHES = {
         'LOCATION': REDIS_CONFIG_URI,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "DECODE_RESPONSES": True
         }
     },
 }
@@ -141,6 +143,10 @@ RQ_QUEUES = {
         'DEFAULT_TIMEOUT': 60
     }
 }
+
+CRONJOBS = [
+
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
