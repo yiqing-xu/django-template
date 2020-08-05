@@ -11,7 +11,5 @@ from django_redis import get_redis_connection
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
-        import pdb
-        pdb.set_trace()
         conn = get_redis_connection()
         conn.delete(settings.WEBSOCKET_CHANNELS)

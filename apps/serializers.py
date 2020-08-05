@@ -19,7 +19,7 @@ class BaseSerializer(serializers.ModelSerializer):
         去除冗余字段
         :param kwargs: (field1, field2, )
         """
-        pop_fields = kwargs.pop("pop_field", ())
+        pop_fields = kwargs.pop("pop_fields", ())
         super(BaseSerializer, self).__init__(**kwargs)
         for field_name in pop_fields:
             self.fields.pop(field_name)
