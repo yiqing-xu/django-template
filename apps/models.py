@@ -9,6 +9,7 @@ from datetime import datetime
 from bson.objectid import ObjectId
 from django.db import models
 from django.db.models import QuerySet
+from django.core.paginator import Paginator
 
 
 class BaseManager(models.Manager):
@@ -48,25 +49,6 @@ class BaseManager(models.Manager):
         """
         return str(ObjectId())
 
-    @staticmethod
-    def pager(queryset: QuerySet, query_params: dict) -> tuple:
-        """
-        分页获取页码
-        :param queryset: QuerySet orm查询集
-        :param query_params: url参数
-        :return: tuple
-        """
-        page = int(query_params.get("page") or 1)
-        page_size = int(query_params.get("page_size") or 10)
-        length = queryset.count()
-        pager = {
-            "page_size": page_size,
-            "max_page": int(math.ceil(length / page_size)),
-            "page": page,
-            "total": length,
-        }
-        return queryset[(page-1) * page_size: page * page_size], pager
-
 
 class SourceBaseModel(models.Model):
     """models初始类，ID字段"""
@@ -82,6 +64,25 @@ class SourceBaseModel(models.Model):
         if not hasattr(self, "id") or not self.id:
             self.id = str(ObjectId())
         return super().save(**kwargs)
+
+    @classmethod
+    def paginator(cls, queryset: QuerySet, query_params: dict) -> tuple:
+        """
+        分页获取页码
+        :param queryset: QuerySet orm查询集
+        :param query_params: query参数
+        :return: tuple
+        """
+        page: int = int(query_params.get("page") or 1)
+        page_size: int = int(query_params.get("page_size") or 10)
+        length: int = queryset.count()
+        pager: dict = {
+            "page": page,
+            "page_size": page_size,
+            "max_page": int(math.ceil(length / page_size)),
+            "total": length
+        }
+        return queryset[(page-1) * page_size: page * page_size], pager
 
     class Meta:
         abstract = True
