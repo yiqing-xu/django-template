@@ -9,7 +9,7 @@ from django.http import JsonResponse
 
 
 class JSONResponse(object):
-    """接口返回体"""
+    """接口响应结构体"""
     success_code = 200
     badrequest_code = 400
     noauth_code = 401

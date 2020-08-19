@@ -79,7 +79,7 @@ class SourceBaseModel(models.Model):
         pager: dict = {
             "page": page,
             "page_size": page_size,
-            "max_page": int(math.ceil(length / page_size)),
+            "max_page": math.ceil(length / page_size),
             "total": length
         }
         return queryset[(page-1) * page_size: page * page_size], pager
