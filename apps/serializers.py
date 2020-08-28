@@ -23,3 +23,18 @@ class BaseSerializer(serializers.ModelSerializer):
         super(BaseSerializer, self).__init__(**kwargs)
         for field_name in pop_fields:
             self.fields.pop(field_name)
+
+
+class ValidatorSerializer(serializers.Serializer):
+
+    page = serializers.IntegerField(min_value=1, default=1, required=False,
+                                    error_messages={"min_value": "页码最小设定为1"})
+    page_size = serializers.IntegerField(min_value=1, max_value=100, default=10, required=False,
+                                         error_messages={"min_value": "每页最少10条数据",
+                                                         "max_value": "每页最多100条数据"})
+
+    def create(self, validated_data):
+        pass
+
+    def update(self, instance, validated_data):
+        pass

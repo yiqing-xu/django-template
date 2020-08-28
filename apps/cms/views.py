@@ -1,3 +1,5 @@
+from typing import Union
+
 from django.http import FileResponse
 
 from views import APIView
@@ -7,7 +9,7 @@ from cms.serializers import FileSerializer, FileModel
 
 class FileCreateView(APIView):
 
-    def post(self, request):
+    def post(self, request) -> dict:
         serializer = FileSerializer(data=request.data, context=dict(request=request))
         if serializer.is_valid():
             serializer.save()
@@ -18,7 +20,7 @@ class FileCreateView(APIView):
 
 class FileRetrieveDestroyView(APIView):
 
-    def get(self, request, **kwargs):
+    def get(self, request, **kwargs) -> Union[dict, FileResponse]:
         file_id = kwargs.get("id")
         try:
             file = FileModel.objects.get(id=file_id)
@@ -32,7 +34,7 @@ class FileRetrieveDestroyView(APIView):
         response['Content-Disposition'] = 'attachment;filename="{}"'.format(name).encode("utf-8")
         return response
 
-    def delete(self, request, **kwargs):
+    def delete(self, request, **kwargs) -> dict:
         file_id = kwargs.get("id")
         FileModel.objects.filter(id=file_id).delete()
         return JSONResponse.success()

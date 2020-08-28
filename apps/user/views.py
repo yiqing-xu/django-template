@@ -1,3 +1,4 @@
+from rest_framework.request import Request
 from rest_framework_jwt.views import ObtainJSONWebToken, jwt_response_payload_handler
 
 from views import APIView
@@ -9,7 +10,7 @@ from websocket.jobs import send_message, mass_message
 
 class TestView(APIView):
 
-    def get(self, request, **kwargs):
+    def get(self, request: Request, **kwargs) -> dict:
         user_id = request.user.id
         data = {'text': 'websocket成功'}
         send_message.delay(user_id, data)
@@ -24,7 +25,7 @@ class TestView(APIView):
 
 class RegisterView(APIView):
 
-    def post(self, *args):
+    def post(self, *args) -> dict:
         serializer = AccountSerializer(data=self.request.data)
         if serializer.is_valid():
             serializer.save()
@@ -35,7 +36,7 @@ class RegisterView(APIView):
 
 class LoginView(ObtainJSONWebToken):
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs) -> dict:
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             user = serializer.object.get('user') or request.user
